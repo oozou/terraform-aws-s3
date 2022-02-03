@@ -6,7 +6,7 @@ module "bucket_kms_key" {
   append_random_suffix = true
   description          = "S3 bucket encryption KMS key"
   key_type             = "service"
-  tags                 = var.tags
+  custom_tags                 = var.tags
 
 
   service_key_info = {
