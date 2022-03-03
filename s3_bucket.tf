@@ -57,7 +57,7 @@ resource "aws_s3_bucket" "bucket" {
   }
 
   tags = merge({
-    Name = var.bucket_name
+    Name = local.bucket_name
   }, var.tags)
 }
 

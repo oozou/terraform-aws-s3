@@ -1,10 +1,20 @@
+variable "prefix" {
+  description = "The prefix name of customer to be displayed in AWS console and resource"
+  type        = string
+}
+
+variable "environment" {
+  description = "To manage a resources with tags"
+  type        = string
+}
+
 variable "bucket_name" {
   description = "The name of the bucket"
   type        = string
 }
 
-variable "append_random_suffix" {
-  description = "Append random string as suffix, to create unique S3 bucket name. Default set to true"
+variable "centralize_hub" {
+  description = "centralize bucket in hub (will add account id to  bucket name)"
   type        = bool
   default     = true
 }
