@@ -1,14 +1,13 @@
 resource "aws_s3_bucket_policy" "this" {
+  count  = local.is_create_bucket_policy
   bucket = aws_s3_bucket.this.id
 
   policy = data.aws_iam_policy_document.combined_policy.json
 }
 
 data "aws_iam_policy_document" "combined_policy" {
-  override_policy_documents = [
-    data.aws_iam_policy_document.this.json,
-    var.additional_bucket_policy
-  ]
+  source_policy_documents   = var.is_enable_s3_hardening_policy ? [data.aws_iam_policy_document.hardening[0].json] : []
+  override_policy_documents = var.additional_bucket_polices
 }
 
 /*
@@ -32,7 +31,8 @@ data "aws_iam_policy_document" "combined_policy" {
     11. Deny S3 buckets access for non Secure Socket Layer requests.
 
 */
-data "aws_iam_policy_document" "this" {
+data "aws_iam_policy_document" "hardening" {
+  count = var.is_enable_s3_hardening_policy ? 1 : 0
   statement {
     sid       = "DenyInsecureUploadsNullEncryption"
     effect    = "Deny"

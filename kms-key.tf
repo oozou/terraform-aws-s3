@@ -15,4 +15,6 @@ module "bucket_kms_key" {
     caller_account_ids = [data.aws_caller_identity.main.account_id]
     aws_service_names  = ["s3.${data.aws_region.active.name}.amazonaws.com"]
   }
+
+  additional_policies = var.kms_key_additional_policies
 }

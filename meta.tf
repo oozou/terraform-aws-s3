@@ -11,6 +11,8 @@ locals {
 
   versioning_enabled = var.versioning_enabled ? "Enabled" : "Suspended"
 
+  is_create_bucket_policy = var.is_enable_s3_hardening_policy == true || length(var.additional_bucket_polices) != 0 ? 1 : 0
+
   tags = merge({
     "Environment" = var.environment,
     "Terraform"   = "true"

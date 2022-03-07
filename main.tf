@@ -114,7 +114,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
 /*                                   RANDOM                                   */
 /* -------------------------------------------------------------------------- */
 resource "random_string" "random_suffix" {
-  length  = 12
+  length  = 6
   upper   = false
   lower   = true
   number  = true
