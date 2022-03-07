@@ -1,6 +1,6 @@
 resource "aws_iam_policy" "consumers" {
   for_each = var.consumer_policy_actions
-  name     = "${var.bucket_name}-${each.key}-${data.aws_region.active.name}"
+  name     = "${local.prefix}-${each.key}-${data.aws_region.active.name}-policy"
   policy   = data.aws_iam_policy_document.consumers[each.key].json
 }
 

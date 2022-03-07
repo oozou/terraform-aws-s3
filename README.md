@@ -69,7 +69,7 @@ module "config_log_bucket" {
   source = "git::https://<YOUR_VCS_URL>/components/terraform-aws-s3-bucket.git?ref=v6.2.0"
 
   bucket_name          = "bucket_name"
-  append_random_suffix = true
+  centralize_hub       = true
   force_s3_destroy     = false
 
   cross_account_principals = local.all_account_ids
@@ -87,7 +87,6 @@ Find the test files in the 'tests' subfolder. They are Terratest codes written i
 
 ##### Prerequisite: Install Go - `brew install go`
 
-
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -101,8 +100,8 @@ Find the test files in the 'tests' subfolder. They are Terratest codes written i
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.50.0, < 4.0.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | >= 3.1.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.74.3 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.1.0 |
 
 ## Modules
 
@@ -130,17 +129,19 @@ Find the test files in the 'tests' subfolder. They are Terratest codes written i
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_append_random_suffix"></a> [append\_random\_suffix](#input\_append\_random\_suffix) | Append random string as suffix, to create unique S3 bucket name. Default set to true | `bool` | `true` | no |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | The name of the bucket | `string` | n/a | yes |
 | <a name="input_bucket_policy_document"></a> [bucket\_policy\_document](#input\_bucket\_policy\_document) | [Optional] Additional Bucket Policy JSON document. Bucket Policy Statements can be overriden by the statement with the same sid from the latest policy. | `string` | `"{}"` | no |
+| <a name="input_centralize_hub"></a> [centralize\_hub](#input\_centralize\_hub) | centralize bucket in hub (will add account id to  bucket name) | `bool` | `true` | no |
 | <a name="input_consumer_policy_actions"></a> [consumer\_policy\_actions](#input\_consumer\_policy\_actions) | [Optional] Map of multiple S3 consumer policies to be applied to bucket e.g. {EC2Read = [s3:GetObject, s3:ListObject], FirehoseWrite =[s3:PutObjectAcl]} | `map(list(string))` | `{}` | no |
 | <a name="input_enable_object_lock"></a> [enable\_object\_lock](#input\_enable\_object\_lock) | [Optional] Enable Object Lock configuration. Default is disabled. | `bool` | `false` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | To manage a resources with tags | `string` | n/a | yes |
 | <a name="input_expiration_days"></a> [expiration\_days](#input\_expiration\_days) | Number of days after which data will be automatically destroyed. Defaults to 0 meaning expiration is disabled | `number` | `0` | no |
 | <a name="input_folder_names"></a> [folder\_names](#input\_folder\_names) | List of folder names to be created in the S3 bucket. Will create .keep file in each folder. Sub-folders are also supported, use S3 standard forward slash as folder separator | `list(string)` | `[]` | no |
 | <a name="input_force_s3_destroy"></a> [force\_s3\_destroy](#input\_force\_s3\_destroy) | Force destruction of the S3 bucket when the stack is deleted | `string` | `false` | no |
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | [Optional] ARN of the KMS Key to use for object encryption. By default, S3 component will create KMS key and associate it with S3. Use only in restricted cases when custom kms policy is needed and you want to bring your KMS. | `map(string)` | `{}` | no |
 | <a name="input_lifecycle_rules"></a> [lifecycle\_rules](#input\_lifecycle\_rules) | List of lifecycle rules to transition the data. Leave empty to disable this feature. storage\_class can be STANDARD\_IA, ONEZONE\_IA, INTELLIGENT\_TIERING, GLACIER, or DEEP\_ARCHIVE | <pre>list(object({<br>    storage_class = string<br>    days          = number<br>  }))</pre> | `[]` | no |
 | <a name="input_object_lock_rule"></a> [object\_lock\_rule](#input\_object\_lock\_rule) | [Optional] Enable Object Lock rule configuration. Use in conjuction of variable - enable\_object\_lock. Default is disabled. | <pre>object({<br>    mode           = string #Valid values are GOVERNANCE and COMPLIANCE<br>    retention_days = number<br>  })</pre> | <pre>{<br>  "mode": "",<br>  "retention_days": 0<br>}</pre> | no |
+| <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix name of customer to be displayed in AWS console and resource | `string` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Custom tags which can be passed on to the AWS resources. They should be key value pairs having distinct keys. | `map(string)` | `{}` | no |
 | <a name="input_versioning_enabled"></a> [versioning\_enabled](#input\_versioning\_enabled) | Should versioning be enabled? (true/false) | `bool` | `false` | no |
 
