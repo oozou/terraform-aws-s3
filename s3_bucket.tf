@@ -58,7 +58,7 @@ resource "aws_s3_bucket" "bucket" {
 
   tags = merge({
     Name = local.bucket_name
-  }, var.tags)
+  }, local.tags)
 }
 
 resource "random_string" "random_suffix" {

@@ -6,7 +6,7 @@ resource "aws_s3_bucket_object" "main" {
 
   tags = merge({
     Name = "${var.bucket_name}-${var.folder_names[count.index]}"
-  }, var.tags)
+  }, local.tags)
 
   count = length(var.folder_names)
 }
