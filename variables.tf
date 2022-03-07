@@ -97,5 +97,5 @@ variable "object_lock_rule" {
 variable "kms_key_arn" {
   description = "[Optional] ARN of the KMS Key to use for object encryption. By default, S3 component will create KMS key and associate it with S3. Use only in restricted cases when custom kms policy is needed and you want to bring your KMS."
   type        = map(string)
-  default     = {} // {kmy_arn = <ARN_VALUE>}
+  default     = {} # {kmy_arn = <ARN_VALUE>}
 }

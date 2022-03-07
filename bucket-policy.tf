@@ -249,7 +249,7 @@ data "aws_iam_policy_document" "this" {
     }
   }
 
-  // S3 buckets should require requests to use Secure Socket Layer
+  # S3 buckets should require requests to use Secure Socket Layer
   statement {
     sid = "DenyNonSSLRequests"
     actions = [

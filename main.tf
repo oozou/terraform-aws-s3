@@ -4,7 +4,7 @@
 resource "aws_s3_bucket" "this" {
   bucket = local.bucket_name
 
-  // Optional Object Lock Config
+  # Optional Object Lock Config
   object_lock_configuration {
     object_lock_enabled = var.enable_object_lock ? "Enabled" : "Disabled"
   }
