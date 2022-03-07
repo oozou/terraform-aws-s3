@@ -13,9 +13,8 @@ data "aws_iam_policy_document" "consumers" {
     sid     = replace(each.key, "/[^a-zA-Z0-9]/", "")
     actions = each.value
     resources = [
-      aws_s3_bucket.bucket.arn,
-      "${aws_s3_bucket.bucket.arn}/*",
+      aws_s3_bucket.this.arn,
+      "${aws_s3_bucket.this.arn}/*",
     ]
   }
 }
-

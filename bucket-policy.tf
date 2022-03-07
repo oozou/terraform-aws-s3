@@ -1,5 +1,5 @@
 resource "aws_s3_bucket_policy" "this" {
-  bucket = aws_s3_bucket.bucket.id
+  bucket = aws_s3_bucket.this.id
 
   policy = data.aws_iam_policy_document.combined_policy.json
 }
@@ -7,7 +7,7 @@ resource "aws_s3_bucket_policy" "this" {
 data "aws_iam_policy_document" "combined_policy" {
   override_policy_documents = [
     data.aws_iam_policy_document.this.json,
-    var.bucket_policy_document
+    var.additional_bucket_policy
   ]
 }
 
@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyInsecureUploadsNullEncryption"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
     actions   = ["s3:PutObject"]
 
     principals {
@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyInsecureUploadsWithoutKMS"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
     actions   = ["s3:PutObject"]
 
     principals {
@@ -72,7 +72,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyUnspecifiedSSEKey"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
     actions   = ["s3:PutObject"]
 
     principals {
@@ -90,7 +90,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyIncorrectSSEKey"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
     actions   = ["s3:PutObject"]
 
     principals {
@@ -108,7 +108,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyInsecureAcl"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -137,7 +137,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyGrantRead"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -160,7 +160,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyGrantWrite"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -183,7 +183,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyGrantReadAcp"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -206,7 +206,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyGrantWriteAcp"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -229,7 +229,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyGrantFullControl"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -256,7 +256,7 @@ data "aws_iam_policy_document" "this" {
       "s3:*",
     ]
     effect    = "Deny"
-    resources = [aws_s3_bucket.bucket.arn]
+    resources = [aws_s3_bucket.this.arn]
     condition {
       test     = "Bool"
       variable = "aws:SecureTransport"

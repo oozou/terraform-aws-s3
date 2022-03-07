@@ -43,17 +43,17 @@ variable "versioning_enabled" {
   default     = false
 }
 
-variable "expiration_days" {
-  description = "Number of days after which data will be automatically destroyed. Defaults to 0 meaning expiration is disabled"
-  type        = number
-  default     = 0
-}
-
 variable "lifecycle_rules" {
   description = "List of lifecycle rules to transition the data. Leave empty to disable this feature. storage_class can be STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, GLACIER, or DEEP_ARCHIVE"
   type = list(object({
-    storage_class = string
-    days          = number
+    id = string
+
+    transition = list(object({
+      days          = number
+      storage_class = string
+    }))
+
+    expiration_days = number
   }))
   default = []
 }
@@ -64,8 +64,8 @@ variable "tags" {
   default     = {}
 }
 
-variable "bucket_policy_document" {
-  description = "[Optional] Additional Bucket Policy JSON document. Bucket Policy Statements can be overriden by the statement with the same sid from the latest policy."
+variable "additional_bucket_policy" {
+  description = "[Optional] Additional IAM policies block, input as data source or json. Ref: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document. Bucket Policy Statements can be overriden by the statement with the same sid from the latest policy."
   type        = string
   default     = "{}"
 }
@@ -79,13 +79,13 @@ variable "enable_object_lock" {
 variable "object_lock_rule" {
   description = "[Optional] Enable Object Lock rule configuration. Use in conjuction of variable - enable_object_lock. Default is disabled."
   type = object({
-    mode           = string #Valid values are GOVERNANCE and COMPLIANCE
-    retention_days = number
+    mode = string #Valid values are GOVERNANCE and COMPLIANCE
+    days = number
   })
 
   default = {
-    mode           = ""
-    retention_days = 0
+    mode = ""
+    days = 0
   }
 
   validation {
