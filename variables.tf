@@ -26,9 +26,15 @@ variable "force_s3_destroy" {
 }
 
 variable "consumer_policy_actions" {
-  description = "Map of multiple S3 consumer policies to be applied to bucket e.g. {EC2Read = [s3:GetObject, s3:ListObject], FirehoseWrite =[s3:PutObjectAcl]}"
+  description = "Map of multiple S3 consumer policies to be applied to bucket e.g. {EC2Read = [s3:GetObject, s3:ListBucket], FirehoseWrite =[s3:PutObjectAcl]}"
   type        = map(list(string))
   default     = {}
+}
+
+variable "is_create_consumer_readonly_policy" {
+  description = "Whether to create consumer readonly policy, policy contents: {Bucket Readonly = [s3:ListBucket,s3:GetObject*]"
+  type        = bool
+  default     = false
 }
 
 variable "folder_names" {
