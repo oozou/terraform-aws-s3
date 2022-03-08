@@ -82,28 +82,15 @@ variable "additional_bucket_polices" {
   default     = []
 }
 
-variable "enable_object_lock" {
-  description = "Enable Object Lock configuration. Default is disabled."
-  type        = bool
-  default     = false
-}
-
 variable "object_lock_rule" {
-  description = "Enable Object Lock rule configuration. Use in conjuction of variable - enable_object_lock. Default is disabled."
+  description = "Enable Object Lock rule configuration. Default is disabled."
   type = object({
-    mode = string #Valid values are GOVERNANCE and COMPLIANCE
-    days = number
+    mode  = string # Valid values are GOVERNANCE and COMPLIANCE.
+    days  = number # If days is set, please set years to null.
+    years = number # If years is set, please set days to null.
   })
 
-  default = {
-    mode = ""
-    days = 0
-  }
-
-  validation {
-    condition     = contains(["GOVERNANCE", "COMPLIANCE", ""], var.object_lock_rule.mode)
-    error_message = "Valid values for object-lock mode are GOVERNANCE and COMPLIANCE."
-  }
+  default = null
 }
 
 variable "kms_key_arn" {
