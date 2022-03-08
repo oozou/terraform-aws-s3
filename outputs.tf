@@ -25,6 +25,11 @@ output "consumer_policies" {
   }
 }
 
+output "consumer_readonly_policy" {
+  description = "S3 Bucket Consumer Readonly Policy name and ARN map"
+  value       = var.is_create_consumer_readonly_policy ? aws_iam_policy.consumers_readonly[0].arn : null
+}
+
 output "bucket_kms_key_id" {
   description = "S3 Bucket KMS Key ID"
   value       = local.kms_key_id
