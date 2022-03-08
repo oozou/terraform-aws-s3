@@ -1,7 +1,3 @@
-data "aws_caller_identity" "main" {}
-
-data "aws_region" "active" {}
-
 locals {
   prefix         = "${var.prefix}-${var.environment}-${var.bucket_name}"
   bucket_name    = var.centralize_hub ? "${local.prefix}-${data.aws_caller_identity.main.account_id}-${random_string.random_suffix.result}" : "${local.prefix}-${random_string.random_suffix.result}"

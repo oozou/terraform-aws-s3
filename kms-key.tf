@@ -16,5 +16,5 @@ module "bucket_kms_key" {
     aws_service_names  = ["s3.${data.aws_region.active.name}.amazonaws.com"]
   }
 
-  additional_policies = var.kms_key_additional_policies
+  additional_policies = var.additional_kms_key_policies
 }
