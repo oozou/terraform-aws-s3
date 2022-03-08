@@ -1,14 +1,13 @@
 resource "aws_s3_bucket_policy" "this" {
-  bucket = aws_s3_bucket.bucket.id
+  count  = local.is_create_bucket_policy
+  bucket = aws_s3_bucket.this.id
 
   policy = data.aws_iam_policy_document.combined_policy.json
 }
 
 data "aws_iam_policy_document" "combined_policy" {
-  override_policy_documents = [
-    data.aws_iam_policy_document.this.json,
-    var.bucket_policy_document
-  ]
+  source_policy_documents   = var.is_enable_s3_hardening_policy ? [data.aws_iam_policy_document.hardening[0].json] : []
+  override_policy_documents = var.additional_bucket_polices
 }
 
 /*
@@ -32,11 +31,12 @@ data "aws_iam_policy_document" "combined_policy" {
     11. Deny S3 buckets access for non Secure Socket Layer requests.
 
 */
-data "aws_iam_policy_document" "this" {
+data "aws_iam_policy_document" "hardening" {
+  count = var.is_enable_s3_hardening_policy ? 1 : 0
   statement {
     sid       = "DenyInsecureUploadsNullEncryption"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
     actions   = ["s3:PutObject"]
 
     principals {
@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyInsecureUploadsWithoutKMS"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
     actions   = ["s3:PutObject"]
 
     principals {
@@ -72,7 +72,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyUnspecifiedSSEKey"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
     actions   = ["s3:PutObject"]
 
     principals {
@@ -90,7 +90,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyIncorrectSSEKey"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
     actions   = ["s3:PutObject"]
 
     principals {
@@ -108,7 +108,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyInsecureAcl"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -137,7 +137,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyGrantRead"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -160,7 +160,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyGrantWrite"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -183,7 +183,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyGrantReadAcp"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -206,7 +206,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyGrantWriteAcp"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -229,7 +229,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     sid       = "DenyGrantFullControl"
     effect    = "Deny"
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.this.arn}/*"]
 
     actions = [
       "s3:PutObject",
@@ -249,14 +249,14 @@ data "aws_iam_policy_document" "this" {
     }
   }
 
-  // S3 buckets should require requests to use Secure Socket Layer
+  # S3 buckets should require requests to use Secure Socket Layer
   statement {
     sid = "DenyNonSSLRequests"
     actions = [
       "s3:*",
     ]
     effect    = "Deny"
-    resources = [aws_s3_bucket.bucket.arn]
+    resources = [aws_s3_bucket.this.arn]
     condition {
       test     = "Bool"
       variable = "aws:SecureTransport"

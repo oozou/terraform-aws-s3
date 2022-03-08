@@ -1,21 +1,21 @@
 output "bucket_id" {
   description = "S3 Bucket Id"
-  value       = aws_s3_bucket.bucket.id
+  value       = aws_s3_bucket.this.id
 }
 
 output "bucket_arn" {
   description = "S3 Bucket ARN"
-  value       = aws_s3_bucket.bucket.arn
+  value       = aws_s3_bucket.this.arn
 }
 
 output "bucket_domain_name" {
   description = "S3 Bucket Domain Name"
-  value       = aws_s3_bucket.bucket.bucket_domain_name
+  value       = aws_s3_bucket.this.bucket_domain_name
 }
 
 output "bucket_name" {
   description = "S3 Bucket Name"
-  value       = aws_s3_bucket.bucket.bucket
+  value       = aws_s3_bucket.this.bucket
 }
 
 output "consumer_policies" {

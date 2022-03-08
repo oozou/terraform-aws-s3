@@ -26,7 +26,7 @@ variable "force_s3_destroy" {
 }
 
 variable "consumer_policy_actions" {
-  description = "[Optional] Map of multiple S3 consumer policies to be applied to bucket e.g. {EC2Read = [s3:GetObject, s3:ListObject], FirehoseWrite =[s3:PutObjectAcl]}"
+  description = "Map of multiple S3 consumer policies to be applied to bucket e.g. {EC2Read = [s3:GetObject, s3:ListObject], FirehoseWrite =[s3:PutObjectAcl]}"
   type        = map(list(string))
   default     = {}
 }
@@ -43,17 +43,17 @@ variable "versioning_enabled" {
   default     = false
 }
 
-variable "expiration_days" {
-  description = "Number of days after which data will be automatically destroyed. Defaults to 0 meaning expiration is disabled"
-  type        = number
-  default     = 0
-}
-
 variable "lifecycle_rules" {
   description = "List of lifecycle rules to transition the data. Leave empty to disable this feature. storage_class can be STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, GLACIER, or DEEP_ARCHIVE"
   type = list(object({
-    storage_class = string
-    days          = number
+    id = string
+
+    transition = list(object({
+      days          = number
+      storage_class = string
+    }))
+
+    expiration_days = number
   }))
   default = []
 }
@@ -64,28 +64,34 @@ variable "tags" {
   default     = {}
 }
 
-variable "bucket_policy_document" {
-  description = "[Optional] Additional Bucket Policy JSON document. Bucket Policy Statements can be overriden by the statement with the same sid from the latest policy."
-  type        = string
-  default     = "{}"
+variable "is_enable_s3_hardening_policy" {
+  description = "Whether to create S3 with hardening policy"
+  type        = bool
+  default     = true
+}
+
+variable "additional_bucket_polices" {
+  description = "Additional IAM policies block, input as data source or json. Ref: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document. Bucket Policy Statements can be overriden by the statement with the same sid from the latest policy."
+  type        = list(string)
+  default     = []
 }
 
 variable "enable_object_lock" {
-  description = "[Optional] Enable Object Lock configuration. Default is disabled."
+  description = "Enable Object Lock configuration. Default is disabled."
   type        = bool
   default     = false
 }
 
 variable "object_lock_rule" {
-  description = "[Optional] Enable Object Lock rule configuration. Use in conjuction of variable - enable_object_lock. Default is disabled."
+  description = "Enable Object Lock rule configuration. Use in conjuction of variable - enable_object_lock. Default is disabled."
   type = object({
-    mode           = string #Valid values are GOVERNANCE and COMPLIANCE
-    retention_days = number
+    mode = string #Valid values are GOVERNANCE and COMPLIANCE
+    days = number
   })
 
   default = {
-    mode           = ""
-    retention_days = 0
+    mode = ""
+    days = 0
   }
 
   validation {
@@ -95,7 +101,13 @@ variable "object_lock_rule" {
 }
 
 variable "kms_key_arn" {
-  description = "[Optional] ARN of the KMS Key to use for object encryption. By default, S3 component will create KMS key and associate it with S3. Use only in restricted cases when custom kms policy is needed and you want to bring your KMS."
+  description = "ARN of the KMS Key to use for object encryption. By default, S3 component will create KMS key and associate it with S3. Use only in restricted cases when custom kms policy is needed and you want to bring your KMS."
   type        = map(string)
-  default     = {} // {kmy_arn = <ARN_VALUE>}
+  default     = {} # {kmy_arn = <ARN_VALUE>}
+}
+
+variable "additional_kms_key_policies" {
+  description = "Additional IAM policies block, input as data source. Ref: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document"
+  type        = list(string)
+  default     = []
 }
