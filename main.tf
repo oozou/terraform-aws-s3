@@ -5,8 +5,12 @@ resource "aws_s3_bucket" "this" {
   bucket = local.bucket_name
 
   # Optional Object Lock Config
-  object_lock_configuration {
-    object_lock_enabled = var.enable_object_lock ? "Enabled" : "Disabled"
+  dynamic "object_lock_configuration" {
+    for_each = var.object_lock_rule != null ? [1] : []
+
+    content {
+      object_lock_enabled = "Enabled"
+    }
   }
 
   force_destroy = var.force_s3_destroy
@@ -82,16 +86,16 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
 /*                     S3 Bucket Oject lock Configuration                     */
 /* -------------------------------------------------------------------------- */
 resource "aws_s3_bucket_object_lock_configuration" "this" {
+  count  = var.object_lock_rule != null ? 1 : 0
   bucket = aws_s3_bucket.this.bucket
 
-  dynamic "rule" {
-    for_each = var.object_lock_rule.mode != "" ? ["on"] : []
+  object_lock_enabled = "Enabled"
 
-    content {
-      default_retention {
-        mode = var.object_lock_rule.mode
-        days = var.object_lock_rule.days
-      }
+  rule {
+    default_retention {
+      mode  = var.object_lock_rule.mode
+      days  = var.object_lock_rule.days
+      years = var.object_lock_rule.years
     }
   }
 }
