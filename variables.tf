@@ -83,7 +83,7 @@ variable "additional_bucket_polices" {
 }
 
 variable "object_lock_rule" {
-  description = "Enable Object Lock rule configuration. Default is disabled."
+  description = "Enable Object Lock rule configuration. Default is disabled. If days is set, please set years to null and if years is set, please set days to null. Valid values for mode are GOVERNANCE and COMPLIANCE."
   type = object({
     mode  = string # Valid values are GOVERNANCE and COMPLIANCE.
     days  = number # If days is set, please set years to null.
