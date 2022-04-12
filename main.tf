@@ -116,6 +116,25 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                        S3 Bucket CORS Configuration                        */
+/* -------------------------------------------------------------------------- */
+resource "aws_s3_bucket_cors_configuration" "this" {
+  bucket = aws_s3_bucket.this.bucket
+
+  dynamic "cors_rule" {
+    for_each = var.cors_rule
+    content {
+      id              = lookup(cors_rule.value, "id", null)
+      allowed_headers = lookup(cors_rule.value, "allowed_headers", null)
+      allowed_methods = lookup(cors_rule.value, "allowed_methods", null)
+      allowed_origins = lookup(cors_rule.value, "allowed_origins", null)
+      expose_headers  = lookup(cors_rule.value, "expose_headers", null)
+      max_age_seconds = lookup(cors_rule.value, "max_age_seconds", null)
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
 /*                                   RANDOM                                   */
 /* -------------------------------------------------------------------------- */
 resource "random_string" "random_suffix" {

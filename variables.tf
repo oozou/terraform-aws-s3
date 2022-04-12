@@ -64,6 +64,19 @@ variable "lifecycle_rules" {
   default = []
 }
 
+variable "cors_rule" {
+  description = "List of core rules to apply to S3 bucket."
+  type = list(object({
+    id              = string
+    allowed_headers = list(string)
+    allowed_methods = list(string)
+    allowed_origins = list(string)
+    expose_headers  = list(string)
+    max_age_seconds = number
+  }))
+  default = []
+}
+
 variable "tags" {
   description = "Custom tags which can be passed on to the AWS resources. They should be key value pairs having distinct keys."
   type        = map(string)
