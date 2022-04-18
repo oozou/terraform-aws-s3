@@ -32,10 +32,10 @@ output "consumer_readonly_policy" {
 
 output "bucket_kms_key_id" {
   description = "S3 Bucket KMS Key ID"
-  value       = local.kms_key_id
+  value       = var.is_use_kms_managed_key ? local.kms_key_id : null
 }
 
 output "bucket_kms_key_arn" {
   description = "S3 Bucket KMS Key ARN"
-  value       = local.kms_key_arn
+  value       = var.is_use_kms_managed_key ? local.kms_key_arn : null
 }
