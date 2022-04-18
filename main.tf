@@ -4,15 +4,6 @@
 resource "aws_s3_bucket" "this" {
   bucket = local.bucket_name
 
-  # Optional Object Lock Config
-  dynamic "object_lock_configuration" {
-    for_each = var.object_lock_rule != null ? [1] : []
-
-    content {
-      object_lock_enabled = "Enabled"
-    }
-  }
-
   force_destroy = var.force_s3_destroy
 
   tags = merge({
