@@ -110,6 +110,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
 /*                        S3 Bucket CORS Configuration                        */
 /* -------------------------------------------------------------------------- */
 resource "aws_s3_bucket_cors_configuration" "this" {
+  count  = length(var.cors_rule) != 0 ? 1 : 0
   bucket = aws_s3_bucket.this.bucket
 
   dynamic "cors_rule" {
