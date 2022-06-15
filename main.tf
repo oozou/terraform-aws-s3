@@ -23,7 +23,6 @@ resource "aws_s3_bucket_public_access_block" "this" {
   restrict_public_buckets = true
 }
 
-
 /* -------------------------------------------------------------------------- */
 /*                                S3 Bucket ACL                               */
 /* -------------------------------------------------------------------------- */
@@ -133,6 +132,6 @@ resource "random_string" "random_suffix" {
   length  = 6
   upper   = false
   lower   = true
-  number  = true
+  numeric = true
   special = false
 }
