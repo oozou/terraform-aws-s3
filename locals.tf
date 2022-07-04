@@ -17,3 +17,8 @@ locals {
     "Terraform"   = "true"
   }, var.tags)
 }
+
+# Warning
+locals {
+  warning_bucket_ownership = var.is_control_object_ownership && var.is_ignore_exist_object == false && var.object_ownership != "BucketOwnerEnforced" ? file("if object_ownership is not BucketOwnerEnforced, the exit object will not affect") : "pass"
+}
