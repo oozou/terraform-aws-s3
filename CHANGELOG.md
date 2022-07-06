@@ -1,3 +1,22 @@
+# v1.1.X
+
+## v1.1.0
+
+- What's Changed
+    - Remove the previous CHANGELOG.md
+    - Update README.md to cover the majority of cases
+    - Add variable `bucket_mode` to set the bucket_mode to log (relate with raise condition)
+    - Add condition for log bucket mode to raise (prevent user from mis config)
+    - Add the `var.object_ownership` variable to regulate the bucket ownership type.
+    - Add the variable `var.is_ignore_exist_object` to ignore the warning displayed by the type `var.object_ownership`
+    - Add condition to remove `aws_s3_bucket_acl` resource when `var.object_ownership` is "BucketOwnerEnforced"
+    - Add variable `var.is_control_object_ownership` for managing bucket ownership controls provides a resource.
+    - Add the resource `aws_s3_bucket_ownership_controls`
+    - Add resource variable `var.source_s3_server_logs` to enable logging and its settings.
+    - Add data blog `aws_s3_bucket.source_bucket` to query the source bucket
+    - Add the `aws_s3_bucket_logging` resource to enable logging from the specified source buckets.
+    - Add data blog `aws_iam_policy_document.target_bucket_policy` in order to construct a policy that authorizes an AWS service to operate on a log bucket.
+
 # v1.0.X
 
 ## v1.0.4
