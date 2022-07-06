@@ -146,3 +146,25 @@ variable "object_ownership" {
     error_message = "The given value is not valid choice."
   }
 }
+
+variable "is_enable_logging" {
+  description = "Whether to enable logging for s3 or not"
+  type        = bool
+  default     = false
+}
+
+variable "bucket_mode" {
+  description = "Define the bucket mode for s3 valida values are default and log"
+  type        = string
+  default     = "default"
+  validation {
+    condition     = contains(["default", "log"], var.bucket_mode)
+    error_message = "Valid value are `default` and `log`"
+  }
+}
+
+variable "source_s3_server_logs" {
+  description = "Source log configuration to enable sending log to this bucket"
+  type        = map(map(any))
+  default     = {}
+}

@@ -29,7 +29,7 @@ resource "aws_s3_bucket_public_access_block" "this" {
 resource "aws_s3_bucket_ownership_controls" "this" {
   count = var.is_control_object_ownership ? 1 : 0
 
-  bucket = local.is_create_bucket_policy ? aws_s3_bucket_policy.this[0].id : aws_s3_bucket.this.id
+  bucket = local.is_create_bucket_policy == 1 ? aws_s3_bucket_policy.this[0].id : aws_s3_bucket.this.id
 
   rule {
     object_ownership = var.object_ownership
@@ -46,6 +46,8 @@ resource "aws_s3_bucket_ownership_controls" "this" {
 /*                                S3 Bucket ACL                               */
 /* -------------------------------------------------------------------------- */
 resource "aws_s3_bucket_acl" "this" {
+  count = var.object_ownership == "BucketOwnerEnforced" ? 0 : 1
+
   bucket = aws_s3_bucket.this.id
   acl    = "private"
 }
@@ -113,6 +115,7 @@ resource "aws_s3_bucket_object_lock_configuration" "this" {
 /* -------------------------------------------------------------------------- */
 /*                         S3 Bucket SSE Configuration                        */
 /* -------------------------------------------------------------------------- */
+####
 resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
   bucket = aws_s3_bucket.this.bucket
 

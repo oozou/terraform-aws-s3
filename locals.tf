@@ -10,12 +10,19 @@ locals {
 
   versioning_enabled = var.versioning_enabled ? "Enabled" : "Suspended"
 
-  is_create_bucket_policy = var.is_enable_s3_hardening_policy == true || length(var.additional_bucket_polices) != 0 ? 1 : 0
+  is_create_bucket_policy = var.is_enable_s3_hardening_policy == true || length(var.additional_bucket_polices) != 0 || (var.bucket_mode == "log" && length(var.source_s3_server_logs) > 0) ? 1 : 0
 
   tags = merge({
     "Environment" = var.environment,
     "Terraform"   = "true"
   }, var.tags)
+}
+
+# Raise error
+locals {
+  raise_duplicate_responsibility       = var.is_enable_logging && var.bucket_mode == "log" ? file("If bucket mode is logged, you should turn off is_enable_logging.") : "pass"
+  raise_not_support_server_endcryption = var.bucket_mode == "log" && var.is_use_kms_managed_key ? file("With server access log for s3, is_use_kms_managed_key is not turned on, so KMS cannot be used.") : "pass"
+  raise_bucket_mode_and_logging        = var.bucket_mode == "default" && length(var.source_s3_server_logs) > 0 ? file("If bucket_mode is default, there is no way to set up logging.") : "pass"
 }
 
 # Warning
