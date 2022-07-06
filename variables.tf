@@ -147,12 +147,6 @@ variable "object_ownership" {
   }
 }
 
-variable "is_enable_logging" {
-  description = "Whether to enable logging for s3 or not"
-  type        = bool
-  default     = false
-}
-
 variable "bucket_mode" {
   description = "Define the bucket mode for s3 valida values are default and log"
   type        = string
