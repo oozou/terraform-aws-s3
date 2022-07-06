@@ -13,7 +13,7 @@ resource "aws_s3_bucket_logging" "this" {
   bucket = data.aws_s3_bucket.source_bucket[each.key].id
 
   target_bucket         = aws_s3_bucket.this.id
-  target_prefix         = lookup(each.value, "bucket_prefix", each.value.bucket_name)
+  target_prefix         = substr(lookup(each.value, "bucket_prefix", each.value.bucket_name), -1, -1) == "/" ? format("%s", lookup(each.value, "bucket_prefix", each.value.bucket_name)) : format("%s/", lookup(each.value, "bucket_prefix", each.value.bucket_name))
   expected_bucket_owner = lookup(each.value, "bucket_owner", null)
 }
 

@@ -3,7 +3,37 @@
 ## Usage
 
 ```terraform
+module "log_bucket" {
+  source = "git@github.com:oozou/terraform-aws-s3.git?ref=<version>"
 
+  # Generics
+  prefix      = "oozou"
+  environment = "devops"
+  bucket_name = "central-log"
+
+  versioning_enabled                 = false
+  force_s3_destroy                   = true
+  is_enable_s3_hardening_policy      = false # We not sure abt hardening policy will be able to integrate with log access server
+  is_create_consumer_readonly_policy = true
+
+  object_ownership = "BucketOwnerEnforced"
+
+  bucket_mode            = "log"
+  is_enable_logging      = false
+  is_use_kms_managed_key = false
+  source_s3_server_logs = {
+    image_bucket = {
+      bucket_name   = module.s3_bucket.bucket_name
+      bucket_prefix = "a/"
+    }
+    static_bucket = {
+      bucket_name   = module.s3_bucket_2.bucket_name
+      bucket_prefix = "b/"
+    }
+  }
+
+  tags = var.generics_info.custom_tags
+}
 ```
 
 <!-- BEGIN_TF_DOCS -->

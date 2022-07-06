@@ -115,7 +115,6 @@ resource "aws_s3_bucket_object_lock_configuration" "this" {
 /* -------------------------------------------------------------------------- */
 /*                         S3 Bucket SSE Configuration                        */
 /* -------------------------------------------------------------------------- */
-####
 resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
   bucket = aws_s3_bucket.this.bucket
 
