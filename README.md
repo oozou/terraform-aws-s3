@@ -3,36 +3,90 @@
 ## Usage
 
 ```terraform
-module "log_bucket" {
+module "image" {
   source = "git@github.com:oozou/terraform-aws-s3.git?ref=<version>"
 
-  # Generics
   prefix      = "oozou"
   environment = "devops"
-  bucket_name = "central-log"
+  bucket_name = "image"
+
+  versioning_enabled                 = true
+  force_s3_destroy                   = true
+  is_enable_s3_hardening_policy      = true
+  is_create_consumer_readonly_policy = true
+
+  object_ownership = "BucketOwnerEnforced"
+
+  tags = { "Workspace" = "xxx-yyy-zzz" }
+}
+
+data "aws_iam_policy_document" "cloudfront_log" {
+  statement {
+    sid    = "Allow CloudFront to use the key to deliver logs"
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt",
+      "kms:Decrypt",
+      "kms:ReEncrypt",
+      "kms:GenerateDataKey*",
+      "kms:DescribeKey"
+    ]
+    resources = ["*"]
+    principals {
+      identifiers = ["delivery.logs.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
+
+module "cdn_log" {
+  source = "git@github.com:oozou/terraform-aws-s3.git?ref=<version>"
+
+  prefix      = "oozou"
+  environment = "devops"
+  bucket_name = "cloudfront-log"
+
+  versioning_enabled                 = true
+  force_s3_destroy                   = true
+  is_enable_s3_hardening_policy      = false
+  is_create_consumer_readonly_policy = false
+
+  consumer_policy_actions     = { ReadWrite = ["s3:*"] }
+  additional_kms_key_policies = [data.aws_iam_policy_document.cloudfront_log.json]
+
+  object_ownership = "BucketOwnerEnforced"
+
+  tags = { "Workspace" = "xxx-yyy-zzz" }
+}
+
+module "server_log" {
+  source = "git@github.com:oozou/terraform-aws-s3.git?ref=<version>"
+
+  prefix      = "book"
+  environment = "devops"
+  bucket_name = "server-log"
 
   versioning_enabled                 = false
   force_s3_destroy                   = true
-  is_enable_s3_hardening_policy      = false # We not sure abt hardening policy will be able to integrate with log access server
+  is_enable_s3_hardening_policy      = false
   is_create_consumer_readonly_policy = true
 
   object_ownership = "BucketOwnerEnforced"
 
   bucket_mode            = "log"
-  is_enable_logging      = false
   is_use_kms_managed_key = false
   source_s3_server_logs = {
     image_bucket = {
-      bucket_name   = module.s3_bucket.bucket_name
-      bucket_prefix = "a/"
+      bucket_name   = module.image.bucket_name
+      bucket_prefix = "image-bucket/" # Auto append /
     }
     static_bucket = {
-      bucket_name   = module.s3_bucket_2.bucket_name
-      bucket_prefix = "b/"
+      bucket_name   = module.cdn_log.bucket_name
+      bucket_prefix = "cdn-log/" # Optional /
     }
   }
 
-  tags = var.generics_info.custom_tags
+  tags = { "Workspace" = "xxx-yyy-zzz" }
 }
 ```
 
