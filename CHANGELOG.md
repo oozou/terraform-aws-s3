@@ -1,6 +1,8 @@
+# Change Log
+
 # v1.1.X
 
-## v1.1.0
+## [v1.1.0] - 2022-07-20
 
 - What's Changed
     - Remove the previous CHANGELOG.md
@@ -19,30 +21,30 @@
 
 # v1.0.X
 
-## v1.0.4
+## [v1.0.4] - 2022-06-15
 
 - What's Changed
     - Enhancement deprecated-variable-number-in-s3 by @xshot9011 in #18
     - Nothing change from v1.0.3, only remove deprecated value
 
-## v1.0.3
+## [v1.0.3] - 2022-06-02
 
 - What's Changed
     - DTPK-122: fix kms_key_id for s3 object by
 
-## v1.0.2
+## [v1.0.2] - 2022-08-04
 
 - What's Changed
     - (remove): deprecated env
     - Add SSE-S3 feature and CORS configuration
     - fix: cors count
 
-## v1.0.1
+## [v1.0.1] - 2022-03-09
 
 - What's Changed
     - Fix bug/object lock
 
-## v1.0.0
+## [v1.0.0] - 2022-03-08
 
 - What's Changed
     - (naming) naming resource for devops standards
