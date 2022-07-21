@@ -1,12 +1,14 @@
 # Change Log
 
-# v1.1.X
+All notable changes to this module will be documented in this file.
 
 ## [v1.1.0] - 2022-07-20
 
-- What's Changed
+### Changed
     - Remove the previous CHANGELOG.md
     - Update README.md to cover the majority of cases
+
+### Added
     - Add variable `bucket_mode` to set the bucket_mode to log (relate with raise condition)
     - Add condition for log bucket mode to raise (prevent user from mis config)
     - Add the `var.object_ownership` variable to regulate the bucket ownership type.
@@ -19,34 +21,32 @@
     - Add the `aws_s3_bucket_logging` resource to enable logging from the specified source buckets.
     - Add data blog `aws_iam_policy_document.target_bucket_policy` in order to construct a policy that authorizes an AWS service to operate on a log bucket.
 
-# v1.0.X
-
 ## [v1.0.4] - 2022-06-15
 
-- What's Changed
+### Changed
     - Enhancement deprecated-variable-number-in-s3 by @xshot9011 in #18
     - Nothing change from v1.0.3, only remove deprecated value
 
 ## [v1.0.3] - 2022-06-02
 
-- What's Changed
+### Changed
     - DTPK-122: fix kms_key_id for s3 object by
 
 ## [v1.0.2] - 2022-08-04
 
-- What's Changed
+### Changed
     - (remove): deprecated env
     - Add SSE-S3 feature and CORS configuration
     - fix: cors count
 
 ## [v1.0.1] - 2022-03-09
 
-- What's Changed
+### Changed
     - Fix bug/object lock
 
 ## [v1.0.0] - 2022-03-08
 
-- What's Changed
+### Changed
     - (naming) naming resource for devops standards
     - Feature/newest providers
     - Feature/consumer policies
