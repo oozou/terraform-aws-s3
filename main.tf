@@ -24,9 +24,30 @@ resource "aws_s3_bucket_public_access_block" "this" {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                            S3 OwnerShip Controll                           */
+/* -------------------------------------------------------------------------- */
+resource "aws_s3_bucket_ownership_controls" "this" {
+  count = var.is_control_object_ownership ? 1 : 0
+
+  bucket = local.is_create_bucket_policy == 1 ? aws_s3_bucket_policy.this[0].id : aws_s3_bucket.this.id
+
+  rule {
+    object_ownership = var.object_ownership
+  }
+
+  depends_on = [
+    aws_s3_bucket_policy.this,
+    aws_s3_bucket_public_access_block.this,
+    aws_s3_bucket.this
+  ]
+}
+
+/* -------------------------------------------------------------------------- */
 /*                                S3 Bucket ACL                               */
 /* -------------------------------------------------------------------------- */
 resource "aws_s3_bucket_acl" "this" {
+  count = var.object_ownership == "BucketOwnerEnforced" ? 0 : 1
+
   bucket = aws_s3_bucket.this.id
   acl    = "private"
 }

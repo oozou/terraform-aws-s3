@@ -1,76 +1,53 @@
-# v6.2.0
+# Change Log
 
-* Block public access to bucket
-* Upgraded KMS component version
+All notable changes to this module will be documented in this file.
 
-# v6.1.1
+## [v1.1.0] - 2022-07-20
 
-* Simplified consumer policies output
+### Changed
+    - Remove the previous CHANGELOG.md
+    - Update README.md to cover the majority of cases
 
-# v6.1.0
+### Added
+    - Add variable `bucket_mode` to set the bucket_mode to log (relate with raise condition)
+    - Add condition for log bucket mode to raise (prevent user from mis config)
+    - Add the `var.object_ownership` variable to regulate the bucket ownership type.
+    - Add the variable `var.is_ignore_exist_object` to ignore the warning displayed by the type `var.object_ownership`
+    - Add condition to remove `aws_s3_bucket_acl` resource when `var.object_ownership` is "BucketOwnerEnforced"
+    - Add variable `var.is_control_object_ownership` for managing bucket ownership controls provides a resource.
+    - Add the resource `aws_s3_bucket_ownership_controls`
+    - Add resource variable `var.source_s3_server_logs` to enable logging and its settings.
+    - Add data blog `aws_s3_bucket.source_bucket` to query the source bucket
+    - Add the `aws_s3_bucket_logging` resource to enable logging from the specified source buckets.
+    - Add data blog `aws_iam_policy_document.target_bucket_policy` in order to construct a policy that authorizes an AWS service to operate on a log bucket.
 
-* Support to add dynamic consumer policy creation to support for multiple consumer policies
-* Support to bring your own KMS if needed in restricted scenarios
-* Upgraded to Terraform 1.0.0
+## [v1.0.4] - 2022-06-15
 
-# v6.0.0
+### Changed
+    - Enhancement deprecated-variable-number-in-s3 by @xshot9011 in #18
+    - Nothing change from v1.0.3, only remove deprecated value
 
-* S3 Object Lock to support write-once-read-many (WORM) model
-* Support to add more bucket policy statement or override statements with the same sid from the latest policy
-* Upgraded to Terraform 0.14
-* Variable tags renamed
+## [v1.0.3] - 2022-06-02
 
-# v5.2.0
+### Changed
+    - DTPK-122: fix kms_key_id for s3 object by
 
-* S3 buckets should require requests to use Secure Socket Layer.
+## [v1.0.2] - 2022-08-04
 
-# v5.1.0
+### Changed
+    - (remove): deprecated env
+    - Add SSE-S3 feature and CORS configuration
+    - fix: cors count
 
-* Version bump of kms key component to v4.1.0 for fine-graining KMS key policies
+## [v1.0.1] - 2022-03-09
 
-## v5.0.0
+### Changed
+    - Fix bug/object lock
 
-* Bug Fix: Add KMS key for the S3 folder
+## [v1.0.0] - 2022-03-08
 
-## v4.3.1
-
-* Bug Fix: Add KMS key for the S3 folder
-
-## v4.3.0
-
-* Feature: Add support for custom_tags
-
-## v4.2.0
-
-* Feature flagged versioning, standard lifecycle and expiration support
-
-## v4.1.0
-
-* Fix kms config
-* "Adding "bucket-owner-full-control" to allowed ACL type in the bucket policy. Lots of AWS service use this canned ACL while writing to the bucket e.g. Kinesis Firehose
-
-## v4.0.0
-
-* Add ability to generate multiple consumer bucket access policies
-* Restrict bucket policy access to certain principals only
-* Enforce server-side encryption
-
-## v3.1.0
-
-* Support for folder structure
-
-## v3.0.0
-
-* Upgrade to Terraform 0.12
-
-## v2.0.1
-
-* Enabled cross account access by providing account numbers
-
-## v2.0.0
-
-* Large refactor
-
-## v1.0.0
-
-* Initial version
+### Changed
+    - (naming) naming resource for devops standards
+    - Feature/newest providers
+    - Feature/consumer policies
+    - Merge from develop

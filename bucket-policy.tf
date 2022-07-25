@@ -6,7 +6,7 @@ resource "aws_s3_bucket_policy" "this" {
 }
 
 data "aws_iam_policy_document" "combined_policy" {
-  source_policy_documents   = var.is_enable_s3_hardening_policy ? [data.aws_iam_policy_document.hardening[0].json] : []
+  source_policy_documents   = var.bucket_mode == "log" ? [data.aws_iam_policy_document.target_bucket_policy[0].json] : var.is_enable_s3_hardening_policy ? [data.aws_iam_policy_document.hardening[0].json] : []
   override_policy_documents = var.additional_bucket_polices
 }
 
