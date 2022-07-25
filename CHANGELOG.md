@@ -7,6 +7,7 @@ All notable changes to this module will be documented in this file.
 ### Changed
 
 - Update tagging format
+- Variable `var.object_ownership` from `ObjectWriter` to `BucketOwnerEnforced`; AWS recommendation
 
 ## [v1.1.0] - 2022-07-20
 
