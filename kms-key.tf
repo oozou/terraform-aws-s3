@@ -8,6 +8,8 @@ module "bucket_kms_key" {
   append_random_suffix = true
   description          = "S3 bucket encryption KMS key"
   key_type             = "service"
+  tags                 = var.tags
+
 
   service_key_info = {
     caller_account_ids = [data.aws_caller_identity.main.account_id]
@@ -15,6 +17,4 @@ module "bucket_kms_key" {
   }
 
   additional_policies = var.additional_kms_key_policies
-
-  tags = var.tags
 }

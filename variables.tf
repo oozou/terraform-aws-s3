@@ -140,7 +140,7 @@ variable "is_ignore_exist_object" {
 variable "object_ownership" {
   description = "Object ownership. Valid values: BucketOwnerEnforced, BucketOwnerPreferred or ObjectWriter."
   type        = string
-  default     = "BucketOwnerEnforced"
+  default     = "ObjectWriter"
   validation {
     condition     = contains(["BucketOwnerEnforced", "BucketOwnerPreferred", "ObjectWriter"], var.object_ownership)
     error_message = "The given value is not valid choice."
