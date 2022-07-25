@@ -153,7 +153,7 @@ variable "bucket_mode" {
   default     = "default"
   validation {
     condition     = contains(["default", "log"], var.bucket_mode)
-    error_message = "Valid value are `default` and `log`"
+    error_message = "Valid value are `default` and `log`."
   }
 }
 
