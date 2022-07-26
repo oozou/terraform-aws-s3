@@ -6,9 +6,7 @@ resource "aws_s3_bucket" "this" {
 
   force_destroy = var.force_s3_destroy
 
-  tags = merge({
-    Name = local.bucket_name
-  }, local.tags)
+  tags = merge({ Name = local.bucket_name }, local.tags)
 }
 
 /* -------------------------------------------------------------------------- */
