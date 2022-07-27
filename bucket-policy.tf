@@ -256,7 +256,7 @@ data "aws_iam_policy_document" "hardening" {
       "s3:*",
     ]
     effect    = "Deny"
-    resources = [aws_s3_bucket.this.arn]
+    resources = [aws_s3_bucket.this.arn, "${aws_s3_bucket.this.arn}/*"]
     condition {
       test     = "Bool"
       variable = "aws:SecureTransport"

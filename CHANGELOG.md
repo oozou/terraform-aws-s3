@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v1.1.2] - 2022-07-27
+
+### Changed
+
+- In DenyNonSSLRequests, we update to `<s3_arn>` and `<s3_arn>/*` for best practice when hardening policies enable.
+
 ## [v1.1.1] - 2022-07-25
 
 ### Changed
