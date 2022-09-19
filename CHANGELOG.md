@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v1.1.3] - 2022-09-19
+
+### Changed
+
+- In KMS, Change to use Oozou KMS Terraform public registry.
+
 ## [v1.1.2] - 2022-07-27
 
 ### Changed

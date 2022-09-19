@@ -1,6 +1,8 @@
 module "bucket_kms_key" {
-  source = "git@github.com:oozou/terraform-aws-kms-key.git?ref=v1.0.0"
-  count  = var.is_use_kms_managed_key && local.length_key_arn == 0 ? 1 : 0
+  source  = "oozou/kms-key/aws"
+  version = "1.0.0"
+
+  count = var.is_use_kms_managed_key && local.length_key_arn == 0 ? 1 : 0
 
   prefix               = var.prefix
   name                 = "${var.bucket_name}-s3-kms"
