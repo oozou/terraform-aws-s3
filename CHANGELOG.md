@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v1.1.4] - 2022-12-12
+
+### Changed
+
+- Update module `bucket_kms_key`'s argument name from `"${var.bucket_name}-s3-kms"` to `"${var.bucket_name}-s3"`; remove `kms` string duplication
+
 ## [v1.1.3] - 2022-09-19
 
 ### Changed
