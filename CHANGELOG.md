@@ -8,6 +8,22 @@ All notable changes to this module will be documented in this file.
 
 - Upgrade the AWS provider to version 5 with the constraint of `>= 5.0.0, < 6.0.0`.
 
+## [v1.1.5] - 2022-01-23
+
+### Added
+
+- Add variables `expected_bucket_owner`
+
+### Changed
+
+- Update resource `aws_s3_bucket_lifecycle_configuration.this` attribute to support
+    - abort_incomplete_multipart_upload
+    - expiration
+    - transition
+    - noncurrent_version_transition
+    - filter
+- Update variable type for `lifecycle_rules`
+
 ## [v1.1.4] - 2022-12-13
 
 ### Changed

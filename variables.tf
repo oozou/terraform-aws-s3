@@ -49,19 +49,16 @@ variable "versioning_enabled" {
   default     = false
 }
 
+variable "expected_bucket_owner" {
+  description = "The account ID of the expected bucket owner"
+  type        = string
+  default     = null
+}
+
 variable "lifecycle_rules" {
   description = "List of lifecycle rules to transition the data. Leave empty to disable this feature. storage_class can be STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, GLACIER, or DEEP_ARCHIVE"
-  type = list(object({
-    id = string
-
-    transition = list(object({
-      days          = number
-      storage_class = string
-    }))
-
-    expiration_days = number
-  }))
-  default = []
+  type        = any
+  default     = []
 }
 
 variable "cors_rule" {
