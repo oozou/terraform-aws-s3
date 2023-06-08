@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v2.0.0] - 2023-06-08
+
+### BREAKING CHANGES
+
+- Upgrade the AWS provider to version 5 with the constraint of `>= 5.0.0, < 6.0.0`.
+
 ## [v1.1.5] - 2022-01-23
 
 ### Added
