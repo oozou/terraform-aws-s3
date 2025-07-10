@@ -1,0 +1,43 @@
+{
+  "test_suite": "Terraform AWS S3 Tests",
+  "start_time": "2025-07-10T14:15:39.131666+07:00",
+  "end_time": "2025-07-10T14:17:05.667204+07:00",
+  "duration": "1m26.622556042s",
+  "total_tests": 6,
+  "passed_tests": 6,
+  "failed_tests": 0,
+  "skipped_tests": 0,
+  "results": [
+    {
+      "name": "TestS3BucketCreated",
+      "status": "PASS",
+      "duration": "4.172345792s"
+    },
+    {
+      "name": "TestS3BucketEncryption",
+      "status": "PASS",
+      "duration": "6.420332166s"
+    },
+    {
+      "name": "TestS3BucketVersioning",
+      "status": "PASS",
+      "duration": "9.815584084s"
+    },
+    {
+      "name": "TestS3BucketPublicAccess",
+      "status": "PASS",
+      "duration": "3.247453625s"
+    },
+    {
+      "name": "TestS3BucketPolicies",
+      "status": "PASS",
+      "duration": "5.99050725s"
+    },
+    {
+      "name": "TestS3ServerAccessLogging",
+      "status": "PASS",
+      "duration": "9.884683625s"
+    }
+  ],
+  "summary": "✅ ALL TESTS PASSED! 6/6 tests successful"
+}
