@@ -4,7 +4,13 @@ This directory contains comprehensive tests for the Terraform AWS S3 module usin
 
 ## Overview
 
-The tests validate the functionality of the AWS s3 module by:
+The tests validate the functionality of the AWS S3 module by creating multiple S3 buckets with different configurations and thoroughly testing:
+
+- **Bucket Creation**: Validates all buckets are successfully created with correct naming
+- **Security Configuration**: Tests encryption, public access blocking, and IAM policies  
+- **Feature Configuration**: Validates versioning, server access logging, and object ownership
+- **Integration Testing**: Tests cross-bucket dependencies and logging relationships
+- **Compliance Validation**: Ensures security best practices and AWS recommendations
 
 ## Test Framework
 
@@ -17,9 +23,13 @@ The tests use the [terraform-test-util](https://github.com/oozou/terraform-test-
 ## Prerequisites
 
 - Go 1.21 or later
-- Terraform 1.6.0 or later
+- Terraform 1.6.0 or later  
 - AWS credentials configured
-- Access to AWS S3, Route53, and IAM services
+- Access to AWS S3, KMS, and IAM services
+- Sufficient IAM permissions for:
+  - S3 bucket operations (create, configure, delete)
+  - KMS key operations (create, use)
+  - IAM policy creation and management
 
 ## Running Tests
 
@@ -105,14 +115,35 @@ The test suite includes the following test cases:
 
 ## Test Configuration
 
-The tests use the `examples/terraform-test` configuration which includes:
+The tests use the `examples/terraform-test` configuration which creates three S3 buckets with different configurations:
 
-- **Static Bucket**: Versioned bucket with KMS encryption and hardening policies
-- **Media Bucket**: Versioned bucket with KMS encryption, no hardening policies
-- **Server Log Bucket**: Non-versioned bucket for storing access logs with AES256 encryption
-- **Cross-bucket Dependencies**: Server access logging from static/media to log bucket
-- **IAM Policies**: Consumer readonly policies for secure access
-- **Security Features**: Public access blocking, object ownership controls
+### Bucket Configurations
+
+| Bucket | Purpose | Versioning | Encryption | Hardening Policy | Readonly Policy | Logging Target |
+|--------|---------|------------|------------|------------------|-----------------|----------------|
+| **Static** | Static content hosting | ✅ Enabled | 🔐 KMS | ✅ Enabled | ✅ Enabled | Server Log Bucket |
+| **Media** | Media file storage | ✅ Enabled | 🔐 KMS | ❌ Disabled | ❌ Disabled | Server Log Bucket |
+| **Server Log** | Access log storage | ❌ Disabled | 🔒 AES256 | ❌ Disabled | ✅ Enabled | N/A |
+
+### Test Variables
+
+The tests pass the following variables to the Terraform configuration:
+
+```go
+Vars: map[string]interface{}{
+    "prefix":      "terratest",
+    "environment": "test", 
+    "name":        "cms",
+    "custom_tags": map[string]string{"test": "true"},
+}
+```
+
+### Security Features (Applied to All Buckets)
+
+- **Public Access Blocking**: All public access blocked by default
+- **Object Ownership**: BucketOwnerEnforced for all buckets
+- **Force Destroy**: Enabled for test cleanup
+- **KMS Encryption**: Customer-managed KMS keys for static/media buckets
 
 ## Test Reports
 
@@ -157,10 +188,12 @@ The following environment variables can be used to configure the tests:
 
 ### Common Issues
 
-1. **AWS Permissions**: Ensure your AWS credentials have permissions for S3, Route53, and IAM
-2. **Domain Conflicts**: Tests use unique domain names to avoid conflicts
-3. **Timeout Issues**: Tests have a 45-minute timeout; adjust if needed
+1. **AWS Permissions**: Ensure your AWS credentials have permissions for S3, KMS, and IAM operations
+2. **Bucket Naming**: Tests use unique names with random suffixes to avoid conflicts
+3. **Timeout Issues**: Tests have a 45-minute timeout; adjust if needed for large deployments
 4. **Resource Cleanup**: The `terraform destroy` is called automatically in defer blocks
+5. **KMS Key Limits**: Be aware of AWS KMS key limits in your account
+6. **Cross-bucket Dependencies**: Server access logging requires proper bucket dependencies
 
 ### Debug Mode
 
